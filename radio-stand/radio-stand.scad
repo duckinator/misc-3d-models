@@ -9,7 +9,17 @@ module psu_vent_slots() {
 
 difference() {
     // Main shape.
-    cube([7.125 + 0.25 + 0.25, 7, 5]);
+    hull() {
+        translate([0.375, 7.125, 5 - 0.375])
+            rotate([90, 0, 0])
+                cylinder(7.125, r=0.375, $fn=30);
+
+        translate([7.25, 7.125, 5 - 0.375])
+            rotate([90, 0, 0])
+                cylinder(7.125, r=0.375, $fn=30);
+
+        cube([7.125 + 0.25 + 0.25, 7, 5 - 0.375]);
+    }
 
     // Power supply slot.
     translate([0.25, -0.25, -0.125])
