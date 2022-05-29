@@ -1,8 +1,8 @@
 // Measurements in mm
-PSU_WIDTH = 181;
+PSU_WIDTH = 184;
 PSU_HEIGHT = 64;
 
-RADIO_WIDTH = 159;
+RADIO_WIDTH = 160;
 RADIO_HEIGHT = 25;
 
 WALL_THICKNESS = 6;
@@ -49,7 +49,7 @@ difference() {
     translate([PSU_WIDTH + 1, 0, 0])
         psu_vent_slots();
 
-    // Truncate to 1/2" thick.
-    /*translate([-0.1, 0.5, -0.1])
-        cube([10, 6, 10]);*/
+    // Truncate to 2*WALL_THICKNESS
+    /*translate([-1, WALL_THICKNESS * 2, -1])
+        cube([TOTAL_WIDTH + 2, TOTAL_DEPTH, TOTAL_HEIGHT + 2]);*/
 }
