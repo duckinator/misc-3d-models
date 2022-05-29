@@ -1,65 +1,55 @@
-module psu_vent_slots() {
-    /*translate([-0.5, 1.25, 1.25])
-        rotate([0, 90, 0])
-            cylinder(h=1, r=1, $fn=6);
-    
-    translate([-0.5, 3.75, 1.25])
-        rotate([0, 90, 0])
-            cylinder(h=1, r=1, $fn=6);
-    */
+// Measurements in mm
+PSU_WIDTH = 181;
+PSU_HEIGHT = 64;
 
-    /*for (x = [0.5 : 1 : 4.5]) {
-        translate([-0.5, x, 1.25])
-            rotate([45, 0, 0])
-                cube([1, 0.5, 0.5]);
-*/
-        /*translate([-0.5, x, 0.5])
-            rotate([45, 0, 0])
-                cube([1, 0.5, 0.5]);*/
-    //}
-    
-    translate([-0.5, 1, 1.25])
+RADIO_WIDTH = 159;
+RADIO_HEIGHT = 25;
+
+WALL_THICKNESS = 6;
+TOTAL_DEPTH = 127;
+TOTAL_WIDTH = PSU_WIDTH + WALL_THICKNESS + WALL_THICKNESS;
+TOTAL_HEIGHT = PSU_HEIGHT + WALL_THICKNESS + RADIO_HEIGHT;
+
+RADIO_LEFT_OFFSET = ((PSU_WIDTH - RADIO_WIDTH) / 2) + WALL_THICKNESS;
+
+
+module psu_vent_slots() {
+    translate([-12, 24, 31])
         rotate([45, 0, 0])
-            cube([1, 0.5, 0.5]);
+            cube([24, 12, 12]);
     
-    translate([-0.5, 4, 1.25])
+    translate([-12, 101, 31])
         rotate([45, 0, 0])
-            cube([1, 0.5, 0.5]);
+            cube([24, 12, 12]);
     
-    translate([-0.5, 1, 1.25])
-        cube([1, 3, 0.7]);
+    translate([-12, 24, 31])
+        cube([24, 77, 17]);
 }
 
 difference() {
     // Main shape.
-    //hull() {
-        /*translate([0.375, 6, 5 - 0.375])
-            rotate([90, 0, 0])
-                cylinder(6, r=0.375, $fn=30);
-
-        translate([7.25, 6, 5 - 0.375])
-            rotate([90, 0, 0])
-                cylinder(6, r=0.375, $fn=30);*/
-
-        difference() {
-            cube([7.125 + 0.25 + 0.25, 5, 3.5/*5 - 0.375*/]);
-            translate([-0.25, -0.25, 2.75])
-                cube([0.75, 6.5, 1.5]);
-            translate([7.125, -0.25, 2.75])
-                cube([0.75, 6.5, 1.5]);
-        }
-    //}
+    difference() {
+        cube([TOTAL_WIDTH, TOTAL_DEPTH, TOTAL_HEIGHT]);
+        translate([-WALL_THICKNESS, -1, PSU_HEIGHT + WALL_THICKNESS])
+            cube([RADIO_LEFT_OFFSET, TOTAL_DEPTH + 2, RADIO_HEIGHT + 1]);
+        translate([TOTAL_WIDTH - RADIO_LEFT_OFFSET + WALL_THICKNESS, -1, PSU_HEIGHT + WALL_THICKNESS])
+            cube([RADIO_LEFT_OFFSET, TOTAL_DEPTH + 2, RADIO_HEIGHT + 1]);
+    }
 
     // Power supply slot.
-    translate([0.25, -0.25, -0.125])
-        cube([7.125, 7.5, 2.5 + 0.125]);
+    translate([WALL_THICKNESS, -1, -1])
+        cube([PSU_WIDTH, TOTAL_DEPTH + 2, PSU_HEIGHT]);
 
     // Radio slot.
-    translate([0.75, -0.25, 2.75])
-        cube([6.125, 7.5, 3]);
+    translate([RADIO_LEFT_OFFSET, -1, PSU_HEIGHT + WALL_THICKNESS])
+        cube([RADIO_WIDTH, TOTAL_DEPTH + 2, RADIO_HEIGHT + 1]);
 
-    // Power supply entilation slots.
+    // Power supply ventilation slots.
     psu_vent_slots();
-    translate([7.5, 0, 0])
+    translate([PSU_WIDTH + 1, 0, 0])
         psu_vent_slots();
+
+    // Truncate to 1/2" thick.
+    /*translate([-0.1, 0.5, -0.1])
+        cube([10, 6, 10]);*/
 }
